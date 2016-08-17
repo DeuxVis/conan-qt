@@ -3,9 +3,8 @@ cmake_minimum_required(VERSION 2.8.12)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-list(APPEND CMAKE_PREFIX_PATH "${CONAN_QT_ROOT}")
 
-find_package(Qt5Core 5.6)
+find_package(Qt5Core REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(AUTOMOC_MOC_OPTIONS PROPERTIES FOLDER CMakeAutomocTargets)
@@ -30,3 +29,6 @@ target_link_libraries(helloworld2
     PUBLIC
     ${CONAN_LIBS}
 )
+set_target_properties(helloworld2 PROPERTIES COMPILE_FLAGS "-fPIC")
+
+add_subdirectory(hellogui)
