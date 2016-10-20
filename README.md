@@ -51,3 +51,7 @@ Project setup installs the library (and all his dependencies) and generates the 
 ### Upload packages to server
 
     $ conan upload Qt/5.6.1-1@osechet/testing --all
+
+### Note
+
+To build with MinGW, you need to first build ICU and set the `LIB` and `INCLUDE` variable as described [here](https://wiki.qt.io/Compiling-ICU-with-MinGW)

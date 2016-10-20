@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8.12)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
+configure_file(qt.conf.in ${CMAKE_BINARY_DIR}/bin/qt.conf)
+
 find_package(Qt5Core REQUIRED)
 
 set(CMAKE_AUTOMOC ON)

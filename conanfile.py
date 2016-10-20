@@ -9,7 +9,9 @@ class QtConan(ConanFile):
     ZIP_FOLDER_NAME = "qt-everywhere-opensource-src-5.6.1"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
+    # options = {"shared": [True, False], "opengl": ["desktop", "dynamic"]}
     default_options = "shared=True"
+    # default_options = "shared=True", "opengl=desktop"
     url="http://github.com/osechet/conan-qt"
     license="http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
@@ -60,7 +62,7 @@ class QtConan(ConanFile):
         """ Define your project building. You decide the way of building it
             to reuse it later in any other project.
         """
-        args = ["-opensource", "-confirm-license", "-no-compile-examples", "-nomake tests", "-prefix _dist"]
+        args = ["-opensource", "-confirm-license", "-nomake examples", "-nomake tests", "-prefix _dist"]
         if not self.options.shared:
             args.insert(0, "-static")
         if self.settings.build_type == "Debug":
@@ -69,38 +71,54 @@ class QtConan(ConanFile):
             args.append("-release")
 
         if self.settings.os == "Windows":
-            build_command = find_executable("jom.exe")
-            if build_command:
-                build_args = ["-j", str(self._thread_count)]
-            else:
-                build_command = "nmake.exe"
-                build_args = []
-            self.output.info("Using '%s %s' to build" % (build_command, " ".join(build_args)))
-
-            vcvars = vcvars_command(self.settings)
-            set_env = 'SET PATH={dir}/qtbase/bin;{dir}/gnuwin32/bin;%PATH%'.format(dir=self.conanfile_directory)
-            args += ["-opengl dynamic"]
-            # it seems not enough to set the vcvars for older versions, it works fine with MSVC2015 without -platform
             if self.settings.compiler == "Visual Studio":
-                if self.settings.compiler.version == "12":
-                    args += ["-platform win32-msvc2013"]
-                if self.settings.compiler.version == "11":
-                    args += ["-platform win32-msvc2012"]
-                if self.settings.compiler.version == "10":
-                    args += ["-platform win32-msvc2010"]
-
-            self.run("cd %s && %s && %s && configure %s" % (self.ZIP_FOLDER_NAME, set_env, vcvars, " ".join(args)))
-            self.run("cd %s && %s && %s %s" % (self.ZIP_FOLDER_NAME, vcvars, build_command, " ".join(build_args)))
-            self.run("cd %s && %s && %s install" % (self.ZIP_FOLDER_NAME, vcvars, build_command))
-        else:
-            if self.settings.os == "Linux":
-                args += ["-silent", "-xcb"]
+                self._build_msvc(args)
             else:
-                args += ["-silent"]
+                self._build_mingw(args)
+        else:
+            self.build_unix(args)
 
-            self.run("cd %s && ./configure %s" % (self.ZIP_FOLDER_NAME, " ".join(args)))
-            self.run("cd %s && make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
-            self.run("cd %s && make install" % (self.ZIP_FOLDER_NAME))
+    def _build_msvc(self, args):
+        build_command = find_executable("jom.exe")
+        if build_command:
+            build_args = ["-j", str(self._thread_count)]
+        else:
+            build_command = "nmake.exe"
+            build_args = []
+        self.output.info("Using '%s %s' to build" % (build_command, " ".join(build_args)))
+
+        vcvars = vcvars_command(self.settings)
+        set_env = 'SET PATH={dir}/qtbase/bin;{dir}/gnuwin32/bin;%PATH%'.format(dir=self.conanfile_directory)
+        args += ["-opengl dynamic"]
+        # it seems not enough to set the vcvars for older versions, it works fine with MSVC2015 without -platform
+        if self.settings.compiler == "Visual Studio":
+            if self.settings.compiler.version == "12":
+                args += ["-platform win32-msvc2013"]
+            if self.settings.compiler.version == "11":
+                args += ["-platform win32-msvc2012"]
+            if self.settings.compiler.version == "10":
+                args += ["-platform win32-msvc2010"]
+
+        self.run("cd %s && %s && %s && configure %s" % (self.ZIP_FOLDER_NAME, set_env, vcvars, " ".join(args)))
+        self.run("cd %s && %s && %s %s" % (self.ZIP_FOLDER_NAME, vcvars, build_command, " ".join(build_args)))
+        self.run("cd %s && %s && %s install" % (self.ZIP_FOLDER_NAME, vcvars, build_command))
+
+    def _build_mingw(self, args):
+        args += ["-developer-build", "-opengl desktop", "-platform win32-g++"]
+
+        self.run("cd %s && configure.bat %s" % (self.ZIP_FOLDER_NAME, " ".join(args)))
+        self.run("cd %s && make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
+        self.run("cd %s && make install" % (self.ZIP_FOLDER_NAME))
+
+    def _build_unix(self, args):
+        if self.settings.os == "Linux":
+            args += ["-silent", "-xcb"]
+        else:
+            args += ["-silent"]
+
+        self.run("cd %s && ./configure %s" % (self.ZIP_FOLDER_NAME, " ".join(args)))
+        self.run("cd %s && make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
+        self.run("cd %s && make install" % (self.ZIP_FOLDER_NAME))
 
     def package(self):
         """ Define your conan structure: headers, libs, bins and data. After building your
