@@ -8,10 +8,8 @@ class QtConan(ConanFile):
     version = "5.6.1-1"
     ZIP_FOLDER_NAME = "qt-everywhere-opensource-src-5.6.1"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False]}
-    # options = {"shared": [True, False], "opengl": ["desktop", "dynamic"]}
-    default_options = "shared=True"
-    # default_options = "shared=True", "opengl=desktop"
+    options = {"shared": [True, False], "opengl": ["desktop", "dynamic"]}
+    default_options = "shared=True", "opengl=desktop"
     url="http://github.com/osechet/conan-qt"
     license="http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
@@ -89,7 +87,7 @@ class QtConan(ConanFile):
 
         vcvars = vcvars_command(self.settings)
         set_env = 'SET PATH={dir}/qtbase/bin;{dir}/gnuwin32/bin;%PATH%'.format(dir=self.conanfile_directory)
-        args += ["-opengl dynamic"]
+        args += ["-opengl %s" % self.options.opengl]
         # it seems not enough to set the vcvars for older versions, it works fine with MSVC2015 without -platform
         if self.settings.compiler == "Visual Studio":
             if self.settings.compiler.version == "12":
@@ -104,11 +102,11 @@ class QtConan(ConanFile):
         self.run("cd %s && %s && %s install" % (self.ZIP_FOLDER_NAME, vcvars, build_command))
 
     def _build_mingw(self, args):
-        args += ["-developer-build", "-opengl desktop", "-platform win32-g++"]
+        args += ["-developer-build", "-opengl %s" % self.options.opengl, "-platform win32-g++"]
 
         self.run("cd %s && configure.bat %s" % (self.ZIP_FOLDER_NAME, " ".join(args)))
-        self.run("cd %s && make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
-        self.run("cd %s && make install" % (self.ZIP_FOLDER_NAME))
+        self.run("cd %s && mingw32-make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
+        self.run("cd %s && mingw32-make install" % (self.ZIP_FOLDER_NAME))
 
     def _build_unix(self, args):
         if self.settings.os == "Linux":
