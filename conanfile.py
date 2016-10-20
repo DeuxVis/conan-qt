@@ -76,7 +76,7 @@ class QtConan(ConanFile):
             else:
                 self._build_mingw(args)
         else:
-            self.build_unix(args)
+            self._build_unix(args)
 
     def _build_msvc(self, args):
         build_command = find_executable("jom.exe")
