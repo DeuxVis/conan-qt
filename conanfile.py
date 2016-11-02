@@ -1,6 +1,6 @@
 import os, sys
 from distutils.spawn import find_executable
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, ConfigureEnvironment
 from conans.tools import download, unzip, vcvars_command, os_info, SystemPackageTool
 
 class QtConan(ConanFile):
@@ -13,6 +13,7 @@ class QtConan(ConanFile):
     url="http://github.com/osechet/conan-qt"
     license="http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
+    requires = "icu/57.1@vitallium/testing"
 
     def system_requirements(self):
         pack_name = None
@@ -102,11 +103,12 @@ class QtConan(ConanFile):
         self.run("cd %s && %s && %s install" % (self.ZIP_FOLDER_NAME, vcvars, build_command))
 
     def _build_mingw(self, args):
+        env = ConfigureEnvironment(self.deps_cpp_info, self.settings)
         args += ["-developer-build", "-opengl %s" % self.options.opengl, "-platform win32-g++"]
 
-        self.run("cd %s && configure.bat %s" % (self.ZIP_FOLDER_NAME, " ".join(args)))
-        self.run("cd %s && mingw32-make -j %s" % (self.ZIP_FOLDER_NAME, str(self._thread_count)))
-        self.run("cd %s && mingw32-make install" % (self.ZIP_FOLDER_NAME))
+        self.run("%s && cd %s && configure.bat %s" % (env.command_line_env, self.ZIP_FOLDER_NAME, " ".join(args)))
+        self.run("%s && cd %s && mingw32-make -j %s" % (env.command_line_env, self.ZIP_FOLDER_NAME, str(self._thread_count)))
+        self.run("%s && cd %s && mingw32-make install" % (env.command_line_env, self.ZIP_FOLDER_NAME))
 
     def _build_unix(self, args):
         if self.settings.os == "Linux":
