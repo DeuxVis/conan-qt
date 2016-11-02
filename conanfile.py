@@ -13,7 +13,7 @@ class QtConan(ConanFile):
     url="http://github.com/osechet/conan-qt"
     license="http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
-    requires = "icu/57.1@vitallium/testing"
+    requires = "icu/57.1@Vitallium/stable"
 
     def system_requirements(self):
         pack_name = None
