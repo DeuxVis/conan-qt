@@ -18,7 +18,7 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
     pyenv rehash
     pyenv activate conan
 elif [[ "$(uname -s)" == 'Linux' ]]; then
-    apt-get install -y libgl1-mesa-dev libxcb1 libxcb1-dev \
+    sudo apt-get install -y libgl1-mesa-dev libxcb1 libxcb1-dev \
         libx11-xcb1 libx11-xcb-dev libxcb-keysyms1 libxcb-keysyms1-dev \
         libxcb-image0 libxcb-image0-dev libxcb-shm0 libxcb-shm0-dev \
         libxcb-icccm4 libxcb-icccm4-dev libxcb-sync1 libxcb-sync-dev \
