@@ -4,7 +4,7 @@ from conans import ConanFile, CMake
 
 # This easily allows to copy the package in other user or channel
 CHANNEL = os.getenv("CONAN_CHANNEL", "testing")
-USERNAME = os.getenv("CONAN_USERNAME", "osechet")
+USERNAME = os.getenv("CONAN_USERNAME", "bilke")
 
 class QtTestConan(ConanFile):
     """ Qt Conan package test """

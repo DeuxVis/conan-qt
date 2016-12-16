@@ -18,7 +18,7 @@ class QtConan(ConanFile):
         "xmlpatterns": [True, False]
     }
     default_options = "shared=True", "opengl=desktop", "websockets=False", "xmlpatterns=False"
-    url = "http://github.com/osechet/conan-qt"
+    url = "http://github.com/bilke/conan-qt"
     license = "http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
 
