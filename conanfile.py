@@ -139,10 +139,18 @@ class QtConan(ConanFile):
         self.run("cd %s && make -j %s" % (self.sourceDir, str(cpu_count())))
         self.run("cd %s && make install" % (self.sourceDir))
 
+    def package(self):
+        pass # Everything is already copied by make install
+
     def package_info(self):
         libs = ['Concurrent', 'Core', 'DBus',
                 'Gui', 'Network', 'OpenGL',
                 'Sql', 'Test', 'Widgets', 'Xml']
+
+        if self.options.websockets:
+            libs.append("WebSockets")
+        if self.options.xmlpatterns:
+            libs.append("XmlPatterns")
 
         self.cpp_info.libs = []
         self.cpp_info.includedirs = ["include"]
