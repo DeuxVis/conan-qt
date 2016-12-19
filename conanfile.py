@@ -46,20 +46,9 @@ class QtConan(ConanFile):
             installer.install(" ".join(pack_names)) # Install the package
 
     def source(self):
-        submodules = ["qtbase"]
-        if self.options.websockets:
-            submodules.append("qtwebsockets")
-        if self.options.xmlpatterns:
-            submodules.append("qtxmlpatterns")
-
         major = ".".join(self.version.split(".")[:2])
         self.run("git clone https://code.qt.io/qt/qt5.git")
         self.run("cd %s && git checkout %s" % (self.sourceDir, major))
-        self.run("cd %s && perl init-repository --no-update --module-subset=%s"
-                 % (self.sourceDir, ",".join(submodules)))
-        self.run("cd %s && git checkout v%s && git submodule update"
-                 % (self.sourceDir, self.version))
-
         if self.settings.os != "Windows":
             self.run("chmod +x ./%s/configure" % self.sourceDir)
 
@@ -67,6 +56,18 @@ class QtConan(ConanFile):
         """ Define your project building. You decide the way of building it
             to reuse it later in any other project.
         """
+
+        submodules = ["qtbase"]
+        if self.options.websockets:
+            submodules.append("qtwebsockets")
+        if self.options.xmlpatterns:
+            submodules.append("qtxmlpatterns")
+
+        self.run("cd %s && perl init-repository --no-update --module-subset=%s"
+                 % (self.sourceDir, ",".join(submodules)))
+        self.run("cd %s && git checkout v%s && git submodule update"
+                 % (self.sourceDir, self.version))
+
         args = ["-opensource", "-confirm-license", "-nomake examples", "-nomake tests",
                 "-prefix %s" % self.package_folder]
         if not self.options.shared:
