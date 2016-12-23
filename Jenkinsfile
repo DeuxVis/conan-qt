@@ -7,7 +7,7 @@ timestamps {
 builders['gcc'] = {
     node('docker') {
         checkout scm
-        def image = docker.image('ogs6/gcc-conan-package-tools:latest')
+        def image = docker.image('ogs6/gcc-conan-package-tools-qt:latest')
         image.pull()
         image.inside() {
             withCredentials([usernamePassword(
