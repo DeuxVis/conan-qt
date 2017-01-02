@@ -21,9 +21,7 @@ class QtTestConan(ConanFile):
     def test(self):
         if self.settings.os == "Windows":
             self.run("activate && %s %s" % (os.sep.join([".", "bin", "helloworld"]), "conan"))
-            self.run("activate && %s %s" % (os.sep.join([".", "bin", "helloworld2"]), "conan"))
             #self.run("activate && %s %s" % (os.sep.join([".", "bin", "hellogui"]), "conan"))
         else:
             self.run("%s %s" % (os.sep.join([".", "bin", "helloworld"]), "conan"))
-            self.run("%s %s" % (os.sep.join([".", "bin", "helloworld2"]), "conan"))
             #self.run("%s %s" % (os.sep.join([".", "bin", "hellogui"]), "conan"))
