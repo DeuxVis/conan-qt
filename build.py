@@ -7,7 +7,8 @@ if __name__ == "__main__":
     builder.add_common_builds()
 
     # Add xmlpatterns builds
-    builder.add({"arch": "x86_64"}, {"Qt:xmlpatterns": "True"})
+    builder.add({"arch": "x86_64", "build_type": "Release"}, {"Qt:xmlpatterns": "True"})
+    builder.add({"arch": "x86_64", "build_type": "Debug"}, {"Qt:xmlpatterns": "True"})
 
     # Filter out
     #  - macOS Debug builds
