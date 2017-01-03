@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.12)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
+# For Qt's .framework files we need the rpath
+set(CMAKE_SKIP_RPATH 0)
 
 configure_file(qt.conf.in ${CMAKE_BINARY_DIR}/bin/qt.conf)
 
