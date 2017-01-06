@@ -7,6 +7,7 @@ if __name__ == "__main__":
     builder.add_common_builds()
 
     # Add xmlpatterns builds
+    builder.add({"arch": "x86", "build_type": "Release"}, {"Qt:xmlpatterns": "True"})
     builder.add({"arch": "x86_64", "build_type": "Release"}, {"Qt:xmlpatterns": "True"})
     builder.add({"arch": "x86_64", "build_type": "Debug"}, {"Qt:xmlpatterns": "True"})
 
@@ -15,8 +16,8 @@ if __name__ == "__main__":
     #  - x32 builds
     filtered_builds = []
     for settings, options in builder.builds:
-        if os_info.is_macos and settings["build_type"] == "Debug" \
-            or settings["arch"] == "x86":
+        if (os_info.is_macos and settings["build_type"] == "Debug") \
+            or (not os_info.is_windows and settings["arch"] == "x86"):
             continue
         filtered_builds.append([settings, options])
     builder.builds = filtered_builds
