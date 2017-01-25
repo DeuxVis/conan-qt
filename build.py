@@ -10,6 +10,7 @@ if __name__ == "__main__":
     builder.add({"arch": "x86", "build_type": "Release"}, {"Qt:xmlpatterns": "True"})
     builder.add({"arch": "x86_64", "build_type": "Release"}, {"Qt:xmlpatterns": "True"})
     builder.add({"arch": "x86_64", "build_type": "Debug"}, {"Qt:xmlpatterns": "True"})
+    builder.add({"arch": "x86_64", "build_type": "Debug", "compiler": "Visual Studio", "compiler.runtime": "MDd"}, {"Qt:xmlpatterns": "True"})
 
     # Filter out
     #  - macOS Debug builds
