@@ -40,7 +40,15 @@ builders['win'] = {
             credentialsId: 'conan',
             passwordVariable: 'pw',
             usernameVariable: 'user')]) {
-            bat "CONAN_PASSWORD=$pw ${script}"
+            withEnv([
+                'CONAN_UPLOAD=1',
+                'CONAN_REFERENCE=Qt/5.6.2',
+                'CONAN_USERNAME=bilke',
+                'CONAN_CHANNEL=testing',
+                "CONAN_PASSWORD=$pw"
+                ]) {
+                bat "${script}"
+            }
         }
     }
 }
