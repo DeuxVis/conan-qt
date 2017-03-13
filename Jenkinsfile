@@ -45,7 +45,8 @@ builders['win'] = {
                 'CONAN_REFERENCE=Qt/5.6.2',
                 'CONAN_USERNAME=bilke',
                 'CONAN_CHANNEL=testing',
-                "CONAN_PASSWORD=$pw"
+                "CONAN_PASSWORD=$pw",
+                "CONAN_VISUAL_VERSIONS=14"
                 ]) {
                 bat "python build.py"
             }
