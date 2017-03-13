@@ -34,13 +34,13 @@ builders['mac'] = {
 }
 
 builders['win'] = {
-    node('win') {
+    node('win1') {
         checkout scm
         withCredentials([usernamePassword(
             credentialsId: 'conan',
             passwordVariable: 'pw',
             usernameVariable: 'user')]) {
-            sh "CONAN_PASSWORD=$pw ${script}"
+            bat "CONAN_PASSWORD=$pw ${script}"
         }
     }
 }
