@@ -21,17 +21,17 @@ timestamps {
     // }
 // }
 
-builders['mac'] = {
-    node('mac') {
-        checkout scm
-        withCredentials([usernamePassword(
-            credentialsId: 'conan',
-            passwordVariable: 'pw',
-            usernameVariable: 'user')]) {
-            sh "CONAN_PASSWORD=$pw ${script}"
-        }
-    }
-}
+// builders['mac'] = {
+    // node('mac') {
+        // checkout scm
+        // withCredentials([usernamePassword(
+            // credentialsId: 'conan',
+            // passwordVariable: 'pw',
+            // usernameVariable: 'user')]) {
+            // sh "CONAN_PASSWORD=$pw ${script}"
+        // }
+    // }
+// }
 
 builders['win'] = {
     node('win1') {
@@ -47,7 +47,7 @@ builders['win'] = {
                 'CONAN_CHANNEL=testing',
                 "CONAN_PASSWORD=$pw"
                 ]) {
-                bat "${script}"
+                bat "python build.py"
             }
         }
     }
