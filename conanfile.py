@@ -9,6 +9,7 @@ class QtConan(ConanFile):
 
     name = "Qt"
     version = "5.6.2"
+    description = "Qt GUI libraries"
     sourceDir = "qt5"
     settings = "os", "arch", "compiler", "build_type"
     options = {
@@ -69,7 +70,7 @@ class QtConan(ConanFile):
                  % (self.sourceDir, self.version))
 
         args = ["-opensource", "-confirm-license", "-nomake examples", "-nomake tests",
-                "-prefix %s" % self.package_folder]
+                "-no-icu", "-prefix %s" % self.package_folder]
         if not self.options.shared:
             args.insert(0, "-static")
         if self.settings.build_type == "Debug":
