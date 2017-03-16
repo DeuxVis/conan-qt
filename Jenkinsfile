@@ -1,59 +1,10 @@
 #!/usr/bin/env groovy
+@Library('conan-pipeline') _
 
-def builders = [:]
-def script="CONAN_UPLOAD=1 CONAN_REFERENCE=Qt/5.6.2 CONAN_USERNAME=bilke CONAN_CHANNEL=testing python build.py"
+def build = new conan.build()
 
 timestamps {
-
-// builders['gcc'] = {
-    // node('docker') {
-        // checkout scm
-        // def image = docker.image('ogs6/gcc-conan-package-tools-qt:latest')
-        // image.pull()
-        // image.inside() {
-            // withCredentials([usernamePassword(
-                // credentialsId: 'conan',
-                // passwordVariable: 'pw',
-                // usernameVariable: 'user')]) {
-                // sh "CONAN_PASSWORD=$pw python build.py"
-            // }
-        // }
-    // }
-// }
-
-// builders['mac'] = {
-    // node('mac') {
-        // checkout scm
-        // withCredentials([usernamePassword(
-            // credentialsId: 'conan',
-            // passwordVariable: 'pw',
-            // usernameVariable: 'user')]) {
-            // sh "CONAN_PASSWORD=$pw ${script}"
-        // }
-    // }
-// }
-
-builders['win'] = {
-    node('win1') {
-        checkout scm
-        withCredentials([usernamePassword(
-            credentialsId: 'conan',
-            passwordVariable: 'pw',
-            usernameVariable: 'user')]) {
-            withEnv([
-                'CONAN_UPLOAD=1',
-                'CONAN_REFERENCE=Qt/5.6.2',
-                'CONAN_USERNAME=bilke',
-                'CONAN_CHANNEL=testing',
-                "CONAN_PASSWORD=$pw",
-                "CONAN_VISUAL_VERSIONS=14"
-                ]) {
-                bat "python build.py"
-            }
-        }
-    }
-}
-
-parallel builders
-
+    build.linux(
+        conanReference: "Qt/5.6.2"
+    )
 }
