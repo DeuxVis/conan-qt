@@ -5,6 +5,7 @@ def build = new conan.build()
 
 timestamps {
     build.linux(
-        conanReference: "Qt/5.6.2"
+        conanReference: "Qt/5.6.2",
+        images: ['ogs6/conangcc46']
     )
 }
