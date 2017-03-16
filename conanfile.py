@@ -26,7 +26,7 @@ class QtConan(ConanFile):
     def system_requirements(self):
         pack_names = None
         if os_info.linux_distro == "ubuntu":
-            def xcb_pack_name = ""
+            xcb_pack_name = ""
             if os_info.os_version_name == "Precise":
                 xcb_pack_name = "libxcb-sync0-dev"
             else:
