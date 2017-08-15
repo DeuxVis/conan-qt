@@ -12,6 +12,7 @@ class QtTestConan(ConanFile):
     requires = "Qt/5.8.0@%s/%s" % (USERNAME, CHANNEL)
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake", "virtualenv"
+    options = {"xmlpatterns": [True, False]}
 
     def build(self):
         cmake = CMake(self.settings)
