@@ -16,7 +16,7 @@ def main():
                 continue
         if settings["arch"] != "x86_64":
             continue
-        options["xmlpatterns"] = True
+        options["Qt:xmlpatterns"] = True
         filtered_builds.append([settings, options, env_vars, build_requires])
 
     builder.builds = filtered_builds
