@@ -184,11 +184,11 @@ class QtConan(ConanFile):
             args += ["-opengl %s" % self.options.opengl]
 
             self.run("cd %s && %s && set" % (self.source_dir, vcvars))
-            self.run("cd %s && %s && configure %s"
-                     % (self.source_dir, vcvars, " ".join(args)))
-            self.run("cd %s && %s && %s %s"
-                     % (self.source_dir, vcvars, build_command, " ".join(build_args)))
-            self.run("cd %s && %s && %s install" % (self.source_dir, vcvars, build_command))
+            self.run("%s && cd %s && configure %s"
+                     % (vcvars, self.sourceDir, " ".join(args)))
+            self.run("%s && cd %s && %s %s"
+                     % (vcvars, self.sourceDir, build_command, " ".join(build_args)))
+            self.run("%s && cd %s && %s install" % (vcvars, self.sourceDir, build_command))
 
     def _build_mingw(self, args):
         env_build = AutoToolsBuildEnvironment(self)
