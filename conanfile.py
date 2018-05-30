@@ -56,7 +56,7 @@ class QtConan(ConanFile):
         "graphicaleffects=False", "imageformats=False", "location=False",
         "serialport=False", "svg=False", "tools=False", "webengine=False",
         "websockets=False", "xmlpatterns=False", "x11extras=True", "openssl=no")
-    url = "http://github.com/osechet/conan-qt"
+    url = "http://github.com/pollen-metrology/conan-qt"
     license = "http://doc.qt.io/qt-5/lgpl.html"
     short_paths = True
 
