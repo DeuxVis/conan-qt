@@ -120,6 +120,7 @@ class QtConan(ConanFile):
             else:
                 self._build_mingw(args)
         else:
+            self.run("cd %s && ls -la" % (self.source_dir))
             self._build_unix(args)
 
     def _build_msvc(self, args):
