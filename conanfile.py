@@ -120,7 +120,6 @@ class QtConan(ConanFile):
             else:
                 self._build_mingw(args)
         else:
-            self.run("cd %s && ls -la" % (self.source_dir))
             self._build_unix(args)
 
     def _build_msvc(self, args):
@@ -208,7 +207,7 @@ class QtConan(ConanFile):
                 args += ["-platform macx-clang-32"]
 
         self.output.info("Using '%s' threads" % str(cpu_count()))
-        self.run("cd %s && ./configure %s" % (self.source_dir, " ".join(args)))
+        self.run("cd %s && sh -c ./configure %s" % (self.source_dir, " ".join(args)))
         self.run("cd %s && make -j %s" % (self.source_dir, str(cpu_count())))
         self.run("cd %s && make install" % (self.source_dir))
 
