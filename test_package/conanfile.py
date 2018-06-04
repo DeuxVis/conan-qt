@@ -3,8 +3,8 @@ from conans import CMake
 import os
 
 ############### CONFIGURE THESE VALUES ##################
-default_user = "osechet"
-default_channel = "stable"
+default_user = "pollen"
+default_channel = "release"
 #########################################################
 
 channel = os.getenv("CONAN_CHANNEL", default_channel)
